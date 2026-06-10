@@ -1,0 +1,29 @@
+#!/bin/sh
+# CGI handler run by busybox httpd. The query string arrives in $QUERY_STRING.
+# Streams a PNG QR code for the "data" parameter to stdout.
+
+# Pull out the data= parameter (handles it appearing anywhere in the query)
+DATA=""
+OLDIFS=$IFS; IFS='&'
+for kv in $QUERY_STRING; do
+  case "$kv" in
+    data=*) DATA="${kv#data=}" ;;
+  esac
+done
+IFS=$OLDIFS
+
+# URL-decode: '+' -> space, then %XX hex escapes via printf
+DATA="$(printf '%s' "$DATA" | tr '+' ' ')"
+DATA="$(printf '%b' "$(printf '%s' "$DATA" | sed 's/%/\\x/g')")"
+
+if [ -z "$DATA" ]; then
+  printf 'Status: 400 Bad Request\r\nContent-Type: text/plain\r\n\r\n'
+  printf 'Missing required query parameter: data\n'
+  exit 0
+fi
+
+# '--' guards against a value that begins with '-' being read as an option
+printf 'Content-Type: image/png\r\n\r\n'
+# -s 9: 9px per module (~200px output for typical content)
+# -m 1: minimal 1-module quiet zone instead of the default 4
+exec qrencode -t PNG -s 9 -m 1 -o - -- "$DATA"
