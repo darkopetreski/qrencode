@@ -33,11 +33,6 @@ The response is an `image/png` QR code for the given string. Spaces can be encod
 | `data` parameter missing | `400 Bad Request` |
 | `qrencode` fails (e.g. input too long for any QR version) | connection closed with partial body |
 
-## Build from source
-
-```sh
-docker build -t darkopetreski/qrencode:latest .
-```
 
 ## Limitations
 
