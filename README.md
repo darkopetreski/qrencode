@@ -43,7 +43,5 @@ docker build -t darkopetreski/qrencode:latest .
 
 This image is intentionally minimal and suited for low-traffic, internal use only:
 
-- **No worker pool.** busybox httpd forks a new process for every request. Under sustained load this will exhaust system resources quickly.
 - **No request validation.** Input length is not checked before being passed to `qrencode`. Very long strings will cause `qrencode` to fail mid-stream after the `200 OK` header has already been sent.
 - **No HTTPS.** Run behind a reverse proxy (nginx, Caddy, etc.) if TLS is required.
-- **Runs as root inside the container.** Acceptable for trusted networks; add a non-root user if exposed to the internet.
