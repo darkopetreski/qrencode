@@ -15,7 +15,7 @@ docker run --rm -p 8080:8080 darkopetreski/qrencode:latest
 Send a GET request with the `data` query parameter:
 
 ```sh
-curl "http://localhost:8080/cgi-bin/qr?data=hello%20world" -o qr.png
+curl "http://localhost:8080/cgi-bin/qr?data=https://example.com" -o qr.png
 ```
 
 Open in a browser:
