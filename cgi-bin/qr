@@ -22,6 +22,12 @@ if [ -z "$DATA" ]; then
   exit 0
 fi
 
+if [ "${#DATA}" -gt 400 ]; then
+  printf 'Status: 400 Bad Request\r\nContent-Type: text/plain\r\n\r\n'
+  printf 'invalid QUERY_STRING\n'
+  exit 0
+fi
+
 # '--' guards against a value that begins with '-' being read as an option
 printf 'Content-Type: image/png\r\n\r\n'
 # -s 9: 9px per module (~200px output for typical content)
